@@ -4,7 +4,7 @@ from cv2 import cv2
 import numpy as np
 
 
-videoCapture = cv2.VideoCapture(0)#yada0
+videoCapture = cv2.VideoCapture("as.mp4")#yada0
 
 
 ret, frame = videoCapture.read()
@@ -21,7 +21,7 @@ shiftWindow = (col, row, w, h)
 roi = frame[row:row + h, col:col + w]
 roiHsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
 
-lowLimit = np.array((0., 0., 0.))
+lowLimit = np.array((0., 60., 32.))
 highLimit = np.array((255., 255., 255.))
 mask = cv2.inRange(roiHsv, lowLimit, highLimit)
 
@@ -29,9 +29,7 @@ mask = cv2.inRange(roiHsv, lowLimit, highLimit)
 roiHist = cv2.calcHist([roiHsv], [0], mask, [180], [0, 180])
 cv2.normalize(roiHist, roiHist, 0, 255, cv2.NORM_MINMAX)
 
-'''
-Bu parametre / durdurma ölçütü algoritmanın kendi içerisinde kaydırma/hesaplama işlemini kaç defa yapacağını belirlemektedir.
-'''
+
 terminationCriteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS , 10, 1)
 
 
@@ -39,10 +37,7 @@ while True:
   
     ret , frame = videoCapture.read()
 
-    '''
-    video içerisinde öncelikli  HSV  renk uzayı üzerinde histogram alıp histogram back projection yapacağız ve 
-    tüm görüntü üzerinde istediğimiz yerin segmentlerini bulacağız.
-    '''
+    
     frameHsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     backprojectedFrame = cv2.calcBackProject([frameHsv], [0], roiHist, [0, 180], 1)
 
