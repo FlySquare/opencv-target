@@ -4,7 +4,7 @@ from cv2 import cv2
 import numpy as np
 
 
-videoCapture = cv2.VideoCapture("as.mp4")#yada0
+videoCapture = cv2.VideoCapture(0,0)#yada0
 
 
 ret, frame = videoCapture.read()
